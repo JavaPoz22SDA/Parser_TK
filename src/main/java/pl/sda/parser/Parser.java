@@ -12,13 +12,13 @@ public class Parser {
     public List<RealEstate> readFile() throws IOException {
         byte[] data = Files.readAllBytes(file);
         String[] dataArray = new String(data).split("\r");
-        List<String> dataList= new ArrayList<>(Arrays.asList(dataArray));
+        List<String> dataList = new ArrayList<>(Arrays.asList(dataArray));
         dataList.remove(0);
         List<RealEstate> realEstateList = new ArrayList<>();
 
-        for (String line :dataList){
+        for (String line : dataList) {
             String[] lineArray = line.split(",");
-            RealEstate realEstate=new RealEstate();
+            RealEstate realEstate = new RealEstate();
             realEstate.setStreet(lineArray[0]);
             realEstate.setCity(lineArray[1]);
             realEstate.setZip(Integer.parseInt(lineArray[2]));
@@ -38,35 +38,39 @@ public class Parser {
 
         return realEstateList;
     }
-    public Map<String, List<RealEstate>> groupByCity(List<RealEstate> realEstates){
+
+    public Map<String, List<RealEstate>> groupByCity(List<RealEstate> realEstates) {
         Map<String, List<RealEstate>> listMap = new HashMap<>();
 
         List<String> cityList = new ArrayList<>();
-        for (RealEstate re: realEstates ) {
-            if(!cityList.contains(re.getCity()))
+
+        for (RealEstate re : realEstates) {
+            if (!cityList.contains(re.getCity()))
                 cityList.add(re.getCity());
         }
 
-        for (String city:cityList) {
+        for (String city : cityList) {
             List<RealEstate> cityRealEstates = new ArrayList<>();
-            for (RealEstate re: realEstates ) {
-                cityRealEstates.add(re);
+            for (RealEstate re : realEstates) {
+                if (city.equals(re.getCity()))
+                    cityRealEstates.add(re);
             }
-            listMap.put(city,cityRealEstates);
+            listMap.put(city, cityRealEstates);
         }
 
         return listMap;
     }
 
-    public Map<String, Integer> countByCity(List<RealEstate> realEstates){
+    public Map<String, Integer> countByCity(List<RealEstate> realEstates) {
         Map<String, Integer> listMap = new HashMap<>();
-        for (RealEstate re:realEstates ) {
-            if(listMap.containsKey(re.getCity())){
-                int value = listMap.get(re.getCity())+1;
-                listMap.put(re.getCity(),value);
-            }else
-                listMap.put(re.getCity(),1);
+        for (RealEstate re : realEstates) {
+            if (listMap.containsKey(re.getCity())) {
+                int value = listMap.get(re.getCity()) + 1;
+                listMap.put(re.getCity(), value);
+            } else
+                listMap.put(re.getCity(), 1);
         }
+
         return listMap;
     }
 }
